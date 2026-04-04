@@ -16,6 +16,8 @@ def getTable():
         getMatchScore(url)
         getHomeAwayTeam(url)
         getStadium(url)
+        getdate(url)
+        getLeague(url)
         break
         
 
@@ -30,7 +32,7 @@ def getHomeAwayTeam(url):
 
     gameData = version_tables[2].head(2)
     home_team = gameData.iloc[0, 2]
-    
+
     #Removing Home before team name 
     stringArray = home_team.split()
     team = []
@@ -63,3 +65,23 @@ def getStadium(url):
             loc.append(i)
             stadium = " ".join(loc)
     print(stadium)
+
+def getdate(url):
+    version_tables = imp.pd.read_html(url, match='Home')
+    gameData = version_tables[2].head(2)
+    date = gameData.iloc[1, 0]
+
+    stringArray = date.split()
+    d = []
+    for i in stringArray:
+        if i != 'Date':
+            i = i.replace('.', '-')
+            d.append(i)
+    format_date = " ".join(d)
+    print(format_date)
+
+def getLeague(url):
+    version_tables = imp.pd.read_html(url, match='EIHL')
+    leagueData = version_tables[0].head(1)
+    league = leagueData.iloc[0, 1]
+    print(league)
