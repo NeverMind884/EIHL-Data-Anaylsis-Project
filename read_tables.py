@@ -10,11 +10,15 @@ def getTable():
 
     for pdf in pdf_links:
         url = pdf
-        all_tables = imp.pd.read_html(url)
-        print(f"Found {len(all_tables)} tables")
+        #all_tables = imp.pd.read_html(url)
+        #print(f"Found {len(all_tables)} tables")
 
-        version_tables = imp.pd.read_html(url, match='G A:B')
-        for i, table in enumerate(version_tables):
-            print(f"\nTable {i}:")
-            print(table.head(4))
+        getMatchScore(url)
         break
+        
+
+def getMatchScore(url):
+    version_tables = imp.pd.read_html(url, match='G A:B')
+    results = version_tables[1]["G A:B"]
+    total = results.dropna().iloc[-1]  
+    print(total)
