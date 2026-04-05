@@ -6,3 +6,4 @@ __pycache__/PDF_extraction.cpython-312.pyc
 __pycache__/PDF_Scraper.cpython-312.pyc
 __pycache__/read_tables.cpython-312.pyc
 db_connect.py
+.vscode/settings.json
