@@ -1,0 +1,11 @@
+USE eihl;
+INSERT INTO teams (team_name) VALUES ("Belfast Giants");
+INSERT INTO teams (team_name) VALUES ("Cardiff Devils");
+INSERT INTO teams (team_name) VALUES ("Coventry Blaze");
+INSERT INTO teams (team_name) VALUES ("Dundee Stars");
+INSERT INTO teams (team_name) VALUES ("Fife Flyers");
+INSERT INTO teams (team_name) VALUES ("Glasgow Clan");
+INSERT INTO teams (team_name) VALUES ("Guildford Flames");
+INSERT INTO teams (team_name) VALUES ("Manchester Storm");
+INSERT INTO teams (team_name) VALUES ("Nottingham Panthers");
+INSERT INTO teams (team_name) VALUES ("Sheffield Steelers");
