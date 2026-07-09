@@ -8,8 +8,7 @@ def uploadGames(val):
 
     sql = "INSERT INTO matches (match_date, home_team_id, away_team_id, match_score, venue_id, league_id) VALUES (%s, %s, %s, %s, %s, %s)"
     mycursor.execute(sql, val)
-
-    mydb.commit()
+    
     mydb.commit()
     
     print(mycursor.rowcount, "record inserted.")
