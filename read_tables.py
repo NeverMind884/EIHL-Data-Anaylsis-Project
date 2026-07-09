@@ -1,31 +1,49 @@
 import imports as imp
 import PDF_extraction as pe
+import db_connect as dc
+
+from datetime import datetime
 
 pdf_links = []
 
 def getTable():
 
-    with open("pdf_links.json", 'r') as f:
+    with open("pdf_links.json", "r") as f:
         pdf_links = imp.json.load(f)
 
-    for pdf in pdf_links:
-        url = pdf
-        #all_tables = imp.pd.read_html(url)
-        #print(f"Found {len(all_tables)} tables")
+    if pdf_links:
+        print("Links retrieved")
 
-        getMatchScore(url)
-        getHomeAwayTeam(url)
-        getStadium(url)
-        getdate(url)
-        getLeague(url)
-        break
+    for url in pdf_links:
+
+        match_score = getMatchScore(url)
+        home_team, away_team = getHomeAwayTeam(url)
+        home_team_id = dc.getTeamID(home_team)
+        away_team_id = dc.getTeamID(away_team)
+        stadium_name = getStadium(url)
+        venue_id = dc.getVenueID(stadium_name)
+        match_date = getdate(url)
+        league_name = getLeague(url)
+        league_id = dc.getLeagueID(league_name)
+
+        val = (
+            match_date,
+            home_team_id,
+            away_team_id,
+            match_score,
+            venue_id,
+            league_id
+        )
+
+        dc.uploadGames(val)
+
         
 
 def getMatchScore(url):
     version_tables = imp.pd.read_html(url, match='G A:B')
     results = version_tables[1]["G A:B"]
     total = results.dropna().iloc[-1]  
-    print(total)
+    return total
 
 def getHomeAwayTeam(url):
     version_tables = imp.pd.read_html(url, match='Home')
@@ -40,7 +58,7 @@ def getHomeAwayTeam(url):
         if i != 'Home':
             team.append(i)
             home = " ".join(team)
-    print(home)
+    
     away_team = gameData.iloc[0, 3]
 
     #Removing Visitor before team name 
@@ -50,7 +68,7 @@ def getHomeAwayTeam(url):
         if i != 'Visitor':
             team.append(i)
             away = " ".join(team)
-    print(away)
+    return home, away
 
 def getStadium(url):
     version_tables = imp.pd.read_html(url, match='Home')
@@ -64,24 +82,23 @@ def getStadium(url):
         if i != 'Place':
             loc.append(i)
             stadium = " ".join(loc)
-    print(stadium)
+    return stadium
 
 def getdate(url):
     version_tables = imp.pd.read_html(url, match='Home')
     gameData = version_tables[2].head(2)
     date = gameData.iloc[1, 0]
 
-    stringArray = date.split()
-    d = []
-    for i in stringArray:
-        if i != 'Date':
-            i = i.replace('.', '-')
-            d.append(i)
-    format_date = " ".join(d)
-    print(format_date)
+    date_str = " ".join(
+        word.replace(".", "-")
+        for word in date.split()
+        if word != "Date"
+    )
+    formatted_date = datetime.strptime(date_str, "%d-%m-%Y").strftime("%Y-%m-%d")
+    return formatted_date 
 
 def getLeague(url):
     version_tables = imp.pd.read_html(url, match='EIHL')
     leagueData = version_tables[0].head(1)
     league = leagueData.iloc[0, 1]
-    print(league)
+    return league
