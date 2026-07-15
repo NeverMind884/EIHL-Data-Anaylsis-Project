@@ -1,6 +1,9 @@
 import imports as imp
 import PDF_extraction as pe
-import db_connect as dc
+import Database.league_queries as lq
+import Database.match_queries as mq
+import Database.team_queries as tq
+import Database.venue_queries as vq
 
 from datetime import datetime
 
@@ -18,13 +21,13 @@ def getTable():
 
         match_score = getMatchScore(url)
         home_team, away_team = getHomeAwayTeam(url)
-        home_team_id = dc.getTeamID(home_team)
-        away_team_id = dc.getTeamID(away_team)
+        home_team_id = tq.getTeamID(home_team)
+        away_team_id = tq.getTeamID(away_team)
         stadium_name = getStadium(url)
-        venue_id = dc.getVenueID(stadium_name)
+        venue_id = vq.getVenueID(stadium_name)
         match_date = getdate(url)
         league_name = getLeague(url)
-        league_id = dc.getLeagueID(league_name)
+        league_id = lq.getLeagueID(league_name)
 
         val = (
             match_date,
@@ -35,7 +38,7 @@ def getTable():
             league_id
         )
 
-        dc.uploadGames(val)
+        mq.uploadGames(val)
 
         
 
