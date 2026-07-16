@@ -4,10 +4,10 @@ from ttkbootstrap.constants import *
 
 class Home(ttk.Frame):
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, app):
         super().__init__(parent)
-
-        self.controller = controller
+        
+        self.app = app
 
         self.columnconfigure(0, weight=1)
 
@@ -38,7 +38,7 @@ class Home(ttk.Frame):
             self.header,
             text="Stats",
             bootstyle="primary-outline",
-            command=lambda: self.controller.show_page("stats")
+            command=lambda: self.app.show_page("stats")
         )
 
 
@@ -46,7 +46,7 @@ class Home(ttk.Frame):
             self.header,
             text="Reports",
             bootstyle="primary-outline",
-            command=lambda: self.controller.show_page("reports")
+            command=lambda: self.app.show_page("reports")
         )
 
 
@@ -123,21 +123,11 @@ class Home(ttk.Frame):
             self.search_entry.insert(0, "Search...")
 
 
-    def search(self, event):
+    def search(self, event=None):
+        query = self.search_entry.get().strip()
 
-        search_text = self.search_entry.get().strip()
-
-        if search_text and search_text != "Search...":
-            self.run_search(search_text)
-
-
-    def run_search(self, query):
-
-        # Save the search value
-        self.controller.state.search_query = query
-
-        # Move to results page
-        self.controller.show_page("query_results")
+        if query and query != "Search...":
+            self.app.perform_search(query)
 
 
     def create_content(self):

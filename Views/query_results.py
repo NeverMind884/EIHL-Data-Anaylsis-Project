@@ -4,16 +4,18 @@ from ttkbootstrap.constants import *
 
 class SearchResults(ttk.Frame):
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, app):
         super().__init__(parent)
 
-        self.controller = controller
+        self.app = app
 
         self.columnconfigure(0, weight=1)
 
         self.rowconfigure(0, weight=0)  # Header
         self.rowconfigure(1, weight=0)  # Separator
         self.rowconfigure(2, weight=1)  # Content
+
+        self.results = self.app.state.search_results
 
         self.create_header()
         self.create_content()
@@ -65,7 +67,7 @@ class SearchResults(ttk.Frame):
 
         self.result_frame = ttk.Labelframe(
             self.content_area,
-            text="Actions",
+            text= "Actions",
             padding=10,
             bootstyle="primary"
         )
@@ -83,7 +85,7 @@ class SearchResults(ttk.Frame):
 
         self.name_label = ttk.Label(
             self.result_frame,
-            text="Name"
+            text=self.results
         )
 
         self.view_button = ttk.Button(

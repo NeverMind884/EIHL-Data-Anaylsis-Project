@@ -1,5 +1,6 @@
 import ttkbootstrap as ttk
-
+from appState import AppState
+from Database import team_queries as tq
 
 class MyApp(ttk.Frame):
 
@@ -11,10 +12,11 @@ class MyApp(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
+        self.state = AppState()
+
         self.pages = {}
 
-        self.create_pages()
-        
+        self.create_pages() 
         self.show_page("home")
 
 
@@ -28,23 +30,18 @@ class MyApp(ttk.Frame):
             "search results": SearchResults,
         }
 
-
         for name, Page in pages.items():
-
-            page = Page(
-                self,
-                self
-            )
+            page = Page(parent=self, app=self)
 
             self.pages[name] = page
-
-            page.grid(
-                row=0,
-                column=0,
-                sticky="nsew"
-            )
+            page.grid(row=0, column=0, sticky="nsew")
 
 
     def show_page(self, name):
 
         self.pages[name].tkraise()
+
+    def perform_search(self, query):
+        self.state.search_query = query
+        self.state.search_results = tq.searchTeamName(query)
+        self.show_page("search results")    
