@@ -27,7 +27,7 @@ def getTable():
         venue_id = vq.getVenueID(stadium_name)
         match_date = getdate(url)
         league_name = getLeague(url)
-        league_id = lq.getLeagueID(league_name)
+        league_id = lq.getOrInsertLeagueID(league_name)
 
         val = (
             match_date,
@@ -103,5 +103,7 @@ def getdate(url):
 def getLeague(url):
     version_tables = imp.pd.read_html(url, match='EIHL')
     leagueData = version_tables[0].head(1)
+    print (leagueData)
     league = leagueData.iloc[0, 1]
+    print(league)
     return league
