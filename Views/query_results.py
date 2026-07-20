@@ -20,6 +20,10 @@ class SearchResults(ttk.Frame):
         self.create_header()
         self.create_content()
 
+    def refresh(self):
+        self.results = self.app.state.search_results
+        self.name_label.config(text=str(self.results))
+
     def create_header(self):
 
         self.header = ttk.Frame(self)
@@ -85,19 +89,23 @@ class SearchResults(ttk.Frame):
 
         self.name_label = ttk.Label(
             self.result_frame,
-            text=self.results
+            text=self.results,
+            font=("Segoe UI", 14, "bold"),
+            anchor="center"
         )
 
         self.view_button = ttk.Button(
             self.result_frame,
             text="View",
-            bootstyle="primary-outline"
+            bootstyle="primary-outline",
+            command=lambda: self.app.load_team_stats(self.results)
         )
 
         self.reports_button = ttk.Button(
             self.result_frame,
             text="Saved Reports",
-            bootstyle="primary-outline"
+            bootstyle="primary-outline",
+            command=lambda: self.app.show_page("saved_reports")
         )
 
         self.name_label.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
